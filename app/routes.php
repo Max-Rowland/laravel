@@ -18,6 +18,10 @@ Route::get('/', function() {
 
 Route::any('employee/index', 'EmployeeController@index');
 
+Route::post('employee/search', array(
+	'uses' => 'EmployeeController@searchEmployees'
+));
+
 
 Route::post( 'employee/removeEmployee', array(
     'uses' => 'EmployeeController@removeEmployee'

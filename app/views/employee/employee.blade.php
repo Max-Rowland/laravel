@@ -1,27 +1,52 @@
 @extends('layout')
 
 @section('content')
-	<h3> this is some employee-specific content... </h3>
+	
+	<form id="searchEmployees" action="search" method="post">
+		<fieldset>
+			<legend>Search Employees</legend>
+			<input type="text" name="name" id="searchName">
+			<select name="department" id="searchDepartment">
+				<option value=""></option>
+				@foreach($departments as $dept)
+					<option value="{{$dept->id}}">{{$dept->name}}</option>
+				@endforeach
+			</select>
+			<select name="jobTitle" id="searchJobTitle">
+				<option value=""></option>
+				@foreach($jobTitles as $job)
+					<option value="{{$job->id}}">{{$job->name}}</option>
+				@endforeach
+			</select>
 
+			<button type="submit">Search</button>
+		</fieldset>
+		
+
+	</form>
+	
+	@if(sizeof($employees) > 0)
 	<table>
 		<thead>
 			<th>Name</th><th>Email</th><th>Skype Name</th><th>Department</th><th>Job Title</th><th>Edit</th><th>Delete</th>
 		</thead>
 		@foreach($employees as $employee)
-		<tr>
-			<td>{{$employee->getFullName()}}</td>
-			<td>{{$employee->email}}</td>
-			<td>{{$employee->skype_name}}</td>
-			<td>{{$employee->department}}</td>
-			<td>{{$employee->job_title}}</td>
-			<td><button onclick="edit('{{$employee->id}}', '{{$employee->first_name}}', '{{$employee->last_name}}', '{{$employee->email}}', '{{$employee->skype_name}}', 
-								'{{$employee->department}}', '{{$employee->job_title}}')">Edit</button>
-			</td>
-			<td><button onclick="deleteEmployee('{{$employee->id}}')">Delete</button></td>
-		</tr>
+			<tr id="employeeRow{{$employee->id}}">
+				<td>{{$employee->getFullName()}}</td>
+				<td>{{$employee->email}}</td>
+				<td>{{$employee->skype_name}}</td>
+				<td>{{$employee->getDepartment()->name}}</td>
+				<td>{{$employee->getJobTitle()->name}}</td>
+				<td><button onclick="edit('{{$employee->id}}', '{{$employee->first_name}}', '{{$employee->last_name}}', '{{$employee->email}}', '{{$employee->skype_name}}', 
+									'{{$employee->department}}', '{{$employee->job_title}}')">Edit</button>
+				</td>
+				<td><button onclick="deleteEmployee('{{$employee->id}}')">Delete</button></td>
+			</tr>
 		@endforeach
 	</table>
+	@endif
 
+	<br><br>
 
 	<form id="addEmployee" action="index" method="post">
 		<fieldset>
@@ -43,7 +68,7 @@
 			<select id="newDepartmentInput" name="department">
 				<option value=""></option>
 				@foreach($departments as $dept)
-				<option value="{{$dept->id}}">{{$dept->name}}</option>
+					<option value="{{$dept->id}}">{{$dept->name}}</option>
 				@endforeach
 			</select>
 
@@ -125,10 +150,11 @@
 				$.ajax({
 					type: "POST",
 					url: "removeEmployee",
-					data: {id: id},
+					data: {id : id},
 					dataType: "text",
 					success: function(data) {
-						alert(data);
+						if(data == "success")
+							$("#employeeRow" + id).remove();
 					}
 				});
 			}

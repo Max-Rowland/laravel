@@ -6,7 +6,7 @@
 		{{ HTML::script('js/jquery.uniform.min.js') }}
 	</head>
     <body>
-        <h1>This is the default header....</h1>
+        <h1>Header and Nav Bar should go here</h1>
         @yield('content')
     </body>
 </html>
