@@ -27,3 +27,7 @@ Route::post( 'employee/removeEmployee', array(
     'uses' => 'EmployeeController@removeEmployee'
 ));
 
+Route::get('employee/autocomplete/{name}', array(
+    'uses' => 'EmployeeController@autocomplete'
+));
+

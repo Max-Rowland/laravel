@@ -5,13 +5,16 @@
 	<form id="searchEmployees" action="search" method="post">
 		<fieldset>
 			<legend>Search Employees</legend>
+			<label for="searchName">Name</label>
 			<input type="text" name="name" id="searchName">
+			<label for="searchDepartment">Department</label>
 			<select name="department" id="searchDepartment">
 				<option value=""></option>
 				@foreach($departments as $dept)
 					<option value="{{$dept->id}}">{{$dept->name}}</option>
 				@endforeach
 			</select>
+			<label for="searchJobTitle">Job Title</label>
 			<select name="jobTitle" id="searchJobTitle">
 				<option value=""></option>
 				@foreach($jobTitles as $job)
@@ -131,6 +134,22 @@
 
 		$("#editCancel").click(function() { 
 			$("#editEmployee").toggle(); 
+		});
+
+		$("input#searchName").autocomplete({
+			source: function(request, response) {
+				$.ajax({
+					type: "GET",
+					url: "autocomplete/" + $('#searchName').val(),
+					dataType: "text",
+					success: function(data) {
+						var suggestions = data.split(",");
+						console.log(suggestions);
+						suggestions.pop();  // remove the empty element at the end
+						response(suggestions);
+					}
+				});
+			}
 		});
 
 		function edit(id, firstName, lastName, email, skypeName, department, jobTitle) {

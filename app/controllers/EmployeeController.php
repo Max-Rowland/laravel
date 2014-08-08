@@ -30,14 +30,12 @@ class EmployeeController extends BaseController {
 		));
 	}
 
+
 	public function removeEmployee() {
 		$employee = Employee::find(Input::get('id'));
 		$employee->is_active = 0;
 
-		if($employee->save())
-			echo "success";
-		else
-			echo "fail";
+		echo $employee->save() ? "success" : "fail";
 	}
 
 
@@ -52,7 +50,7 @@ class EmployeeController extends BaseController {
 			$nameArr = explode(" ", $nameCriteria);
 			if(sizeof($nameArr) == 1) {
 				$employees = $employees->where('first_name', '=', $nameArr[0]);
-			} 
+			}
 			elseif(sizeof($nameArr) == 2) {
 				$employees = $employees->where('first_name', '=', $nameArr[0]);
 				$employees = $employees->where('last_name', '=', $nameArr[1]);
@@ -74,6 +72,34 @@ class EmployeeController extends BaseController {
 			'departments' => Department::all(),
 			'jobTitles' => JobTitle::all()
 		));
+	}
+
+
+	public function autocomplete($name) {
+		$nameArr = explode(" ", $name);
+		$retval = "";
+
+		$employees = new Employee;
+
+		if(sizeof($nameArr) == 1) {
+			$employees = $employees->where('first_name', 'LIKE', '%' . $nameArr[0] . '%');
+			$employees = $employees->orWhere('last_name', 'LIKE', '%' . $nameArr[0] . '%');
+		}
+		elseif(sizeof($nameArr) == 2) {
+			$employees = $employees->where('first_name', 'LIKE', '%' . $nameArr[0] . '%');
+			$employees = $employees->where('last_name', 'LIKE', '%' . $nameArr[1] . '%');
+		}
+
+		$employees = $employees->where('is_active', '=', 1);
+
+		$employees = $employees->get();
+
+		foreach($employees as $employee) {
+			$retval .= $employee->first_name . " " . $employee->last_name .  ",";
+		}
+
+		echo $retval;
+		exit;
 	}
 
 
