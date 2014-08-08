@@ -13,6 +13,7 @@
 		</fieldset>
 	</form>
 
+
 	<table>
 		<thead>
 			<th>Name</th><th>Edit</th><th>Delete</th>
@@ -26,6 +27,7 @@
 		@endforeach
 	</table>
 
+
 	<form id="editJobTitle" action="index" method="post" style="display: none;">
 		<fieldset>
 			<legend>Edit Job Title</legend>
@@ -36,6 +38,7 @@
 			<button type="reset" id="cancelBtn">Cancel</button>
 		</fieldset>
 	</form>
+
 
 	<script type="text/javascript">
 		function editJob(id, name) {

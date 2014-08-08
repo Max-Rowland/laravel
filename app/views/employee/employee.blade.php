@@ -29,6 +29,7 @@
 
 	</form>
 	
+
 	@if(sizeof($employees) > 0)
 	<table>
 		<thead>
@@ -50,7 +51,9 @@
 	</table>
 	@endif
 
+
 	<br><br>
+
 
 	<form id="addEmployee" action="index" method="post">
 		<fieldset>
@@ -88,6 +91,7 @@
 		</fieldset>
 		
 	</form>
+
 
 	<form id="editEmployee" action="index" method="post" style="display:none;">
 		<fieldset>
@@ -128,7 +132,6 @@
 		</fieldset>
 		
 	</form>
-
 
 
 	<script type="text/javascript">
@@ -181,5 +184,4 @@
 		}
 
 	</script>
-
 @stop
