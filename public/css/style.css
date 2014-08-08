@@ -20,13 +20,3 @@
 	width: 50%;
 	text-align: left;
 }
-	
-
-.sim-logo {
-	background: white 0px -270px url(../images/sim-sprite.png) no-repeat;
-	height: 72px;
-	margin-bottom: 1em;
-	margin-left: auto;
-	margin-right: auto;
-	width: 190px;
-}
