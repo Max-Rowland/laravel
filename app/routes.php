@@ -43,4 +43,9 @@ Route::post( 'department/removeDepartment', array(
 
 
 //*********** JOB TITLE ROUTES ***********
+Route::any('jobTitle/index', 'JobTitleController@index');
+
+Route::post( 'jobTitle/removeJobTitle', array(
+    'uses' => 'JobTitleController@removeJobTitle'
+));
 //****************************************

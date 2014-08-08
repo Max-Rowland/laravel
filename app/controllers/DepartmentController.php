@@ -4,12 +4,7 @@ class DepartmentController extends BaseController {
 
 	public function index()	{
 		if(Request::isMethod('post')) {
-			$department = null;
-
-			if(Input::has('id'))
-				$department = Department::find(Input::get('id'));
-			else
-				$department = new Department;
+			$department = Input::has('id') ? Department::find(Input::get('id')) : new Department;
 
 			$department->parent_department = ( Input::get('parent_department') == "" ? null : Input::get('parent_department') );
 			//$department->manager = Input::get('manager');

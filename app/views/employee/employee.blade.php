@@ -1,6 +1,7 @@
 @extends('layout')
 
 @section('content')
+	<h2>Employees</h2>
 	
 	<form id="searchEmployees" action="search" method="post">
 		<fieldset>
