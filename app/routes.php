@@ -31,3 +31,5 @@ Route::get('employee/autocomplete/{name}', array(
     'uses' => 'EmployeeController@autocomplete'
 ));
 
+
+Route::any('department/index', 'DepartmentController@index');
