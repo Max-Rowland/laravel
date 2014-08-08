@@ -45,7 +45,18 @@
 		}
 
 		function deleteJob(id) {
-			alert("delete " + id);
+			if(confirm("You sure you want to delete the department?") == true) {
+				$.ajax({
+					type: "POST",
+					url: "removeJobTitle",
+					data: {id : id},
+					dataType: "text",
+					success: function(data) {
+						if(data == "success")
+							$("#jobRow" + id).remove();
+					}
+				});
+			}
 		}
 
 		$("#cancelBtn").click(function() {

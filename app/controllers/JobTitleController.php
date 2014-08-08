@@ -16,6 +16,13 @@ class JobTitleController extends BaseController {
 			'jobTitles' => JobTitle::where('is_active', '=', '1')->get()
 		));
 	}
+
+	public function removeJobTitle() {
+		$job = JobTitle::find(Input::get('id'));
+		$job->is_active = 0;
+
+		echo $job->save() ? "success" : "fail";
+	}
 }
 
 ?>
