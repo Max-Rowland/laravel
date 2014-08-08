@@ -38,8 +38,8 @@
 				<td>{{$employee->getFullName()}}</td>
 				<td>{{$employee->email}}</td>
 				<td>{{$employee->skype_name}}</td>
-				<td>{{$employee->getDepartment()->name}}</td>
-				<td>{{$employee->getJobTitle()->name}}</td>
+				<td>{{ $employee->getDepartment() == null ? "" : $employee->getDepartment()->name }}</td>
+				<td>{{ $employee->getJobTitle() == null ? "" : $employee->getDepartment()->name}}</td>
 				<td><button onclick="edit('{{$employee->id}}', '{{$employee->first_name}}', '{{$employee->last_name}}', '{{$employee->email}}', '{{$employee->skype_name}}', 
 									'{{$employee->department}}', '{{$employee->job_title}}')">Edit</button>
 				</td>

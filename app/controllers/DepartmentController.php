@@ -11,7 +11,7 @@ class DepartmentController extends BaseController {
 			else
 				$department = new Department;
 
-			$department->parent_department = Input::get('parent_department');
+			$department->parent_department = ( Input::get('parent_department') == "" ? null : Input::get('parent_department') );
 			//$department->manager = Input::get('manager');
 			$department->name = Input::get('name');
 			$department->is_active = 1;
@@ -22,6 +22,13 @@ class DepartmentController extends BaseController {
 		return View::make('department/department', array(
 			'departments' => Department::where('is_active', '=', '1')->get()
 		));
+	}
+
+	public function removeDepartment() {
+		$dept = Department::find(Input::get('id'));
+		$dept->is_active = 0;
+
+		echo $dept->save() ? "success" : "fail";
 	}
 
 }

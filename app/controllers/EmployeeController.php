@@ -16,8 +16,8 @@ class EmployeeController extends BaseController {
 			$employee->last_name = Input::get('last_name');
 			$employee->email = Input::get('email');
 			$employee->skype_name = Input::get('skype_name');
-			$employee->department = Input::get('department');
-			$employee->job_title = Input::get('job_title');
+			$employee->department = Input::get('department') == "" ? null : Input::get('department');
+			$employee->job_title = Input::get('job_title') == "" ? null : Input::get('job_title');
 
 			$employee->save();
 		}
