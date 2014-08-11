@@ -3,39 +3,47 @@
 @section('content')
 	<h2>Job Titles</h2>
 
-	<form id="newJobTitle" action="index" method="post">
+	<form id="newJobTitle" action="index" method="post" class="pure-form pure-form-aligned">
 		<fieldset>
 			<legend>Add Job Title</legend>
-			<label for="addName">Name</label>
-			<input type="text" name="name" id="addName">
-			<button type="submit">Save</button>
-			<button type="reset">Cancel</button>
+
+			<div class="pure-control-group">
+				<label for="addName">Name</label>
+				<input type="text" name="name" id="addName">
+			</div>
+
+			<button type="submit" class="pure-button pure-button-primary">Save</button>
+			<button type="reset" class="pure-button">Cancel</button>
 		</fieldset>
 	</form>
 
 
-	<table>
+	<table class="pure-table pure-table-horizontal">
 		<thead>
 			<th>Name</th><th>Edit</th><th>Delete</th>
 		</thead>
 		@foreach($jobTitles as $job)
 			<tr id="jobRow{{$job->id}}">
 				<td>{{$job->name}}</td>
-				<td><button onclick="editJob('{{$job->id}}', '{{$job->name}}')">Edit</button></td>
-				<td><button onclick="deleteJob('{{$job->id}}')">Delete</button></td>
+				<td><button onclick="editJob('{{$job->id}}', '{{$job->name}}')" class="pure-button">Edit</button></td>
+				<td><button onclick="deleteJob('{{$job->id}}')" class="pure-button">Delete</button></td>
 			</tr>
 		@endforeach
 	</table>
 
 
-	<form id="editJobTitle" action="index" method="post" style="display: none;">
+	<form id="editJobTitle" action="index" method="post" style="display: none;" class="pure-form pure-form-aligned">
 		<fieldset>
 			<legend>Edit Job Title</legend>
 			<input type="hidden" name="id" id="editId">
-			<label for="editName">Name</label>
-			<input type="text" name="name" id="editName">
-			<button type="submit">Save</button>
-			<button type="reset" id="cancelBtn">Cancel</button>
+
+			<div class="pure-control-group">
+				<label for="editName">Name</label>
+				<input type="text" name="name" id="editName">
+			</div>
+
+			<button type="submit" class="pure-button pure-button-primary">Save</button>
+			<button type="reset" id="cancelBtn" class="pure-button">Cancel</button>
 		</fieldset>
 	</form>
 

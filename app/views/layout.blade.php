@@ -4,16 +4,17 @@
 		{{ HTML::script('js/jquery.min.js') }}
 		{{ HTML::script('js/jquery.uniform.min.js') }}
 		{{ HTML::script('js/jquery-ui.min.js') }}
-		{{ HTML::style('css/style.css'); }}
+		{{ HTML::style('css/style.css') }}
+		{{ HTML::style('css/pure-min.css'); }}
 	</head>
     <body>
     	<div align="center">
     		{{ HTML::image('images/sim-logo.png', 'alt', array( 'width' => 200, 'height' => 70 )) }}
     		<div id="navbar">
-				<a href="depts">Departments</a>
-				<a href="emps">Employees</a>
-				<a href="titles">Job Titles</a>
-				<a href="admin/login">Login</a>
+				<a href="/laravel/public/department/index">Departments</a>
+				<a href="/laravel/public/employee/index">Employees</a>
+				<a href="/laravel/public/jobTitle/index">Job Titles</a>
+				<a href="/laravel/public/logout">Logout</a>
 			</div>
 	        @yield('content')
     	</div>

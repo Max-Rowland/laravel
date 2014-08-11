@@ -3,35 +3,45 @@
 @section('content')
 	<h2>Employees</h2>
 	
-	<form id="searchEmployees" action="search" method="post">
+	<form id="searchEmployees" action="search" method="post" class="pure-form pure-form-aligned">
 		<fieldset>
 			<legend>Search Employees</legend>
-			<label for="searchName">Name</label>
-			<input type="text" name="name" id="searchName">
-			<label for="searchDepartment">Department</label>
-			<select name="department" id="searchDepartment">
-				<option value=""></option>
-				@foreach($departments as $dept)
-					<option value="{{$dept->id}}">{{$dept->name}}</option>
-				@endforeach
-			</select>
-			<label for="searchJobTitle">Job Title</label>
-			<select name="jobTitle" id="searchJobTitle">
-				<option value=""></option>
-				@foreach($jobTitles as $job)
-					<option value="{{$job->id}}">{{$job->name}}</option>
-				@endforeach
-			</select>
 
-			<button type="submit">Search</button>
+			<div class="pure-control-group">
+				<label for="searchName">Name</label>
+				<input type="text" name="name" id="searchName">
+			</div>
+
+			<div class="pure-control-group">
+				<label for="searchDepartment">Department</label>
+				<select name="department" id="searchDepartment" style="width: 200px;">
+					<option value=""></option>
+					@foreach($departments as $dept)
+						<option value="{{$dept->id}}">{{$dept->name}}</option>
+					@endforeach
+				</select>
+			</div>
+
+			<div class="pure-control-group">
+				<label for="searchJobTitle">Job Title</label>
+				<select name="jobTitle" id="searchJobTitle" style="width: 200px;">
+					<option value=""></option>
+					@foreach($jobTitles as $job)
+						<option value="{{$job->id}}">{{$job->name}}</option>
+					@endforeach
+				</select>
+			</div>
+
+			<button type="submit" class="pure-button pure-button-primary">Search</button>
 		</fieldset>
 		
 
 	</form>
-	
+
+	<br><br>
 
 	@if(sizeof($employees) > 0)
-	<table>
+	<table class="pure-table pure-table-horizontal">
 		<thead>
 			<th>Name</th><th>Email</th><th>Skype Name</th><th>Department</th><th>Job Title</th><th>Edit</th><th>Delete</th>
 		</thead>
@@ -41,11 +51,11 @@
 				<td>{{$employee->email}}</td>
 				<td>{{$employee->skype_name}}</td>
 				<td>{{ $employee->getDepartment() == null ? "" : $employee->getDepartment()->name }}</td>
-				<td>{{ $employee->getJobTitle() == null ? "" : $employee->getDepartment()->name}}</td>
+				<td>{{ $employee->getJobTitle() == null ? "" : $employee->getJobTitle()->name}}</td>
 				<td><button onclick="edit('{{$employee->id}}', '{{$employee->first_name}}', '{{$employee->last_name}}', '{{$employee->email}}', '{{$employee->skype_name}}', 
-									'{{$employee->department}}', '{{$employee->job_title}}')">Edit</button>
+									'{{$employee->department}}', '{{$employee->job_title}}')" class="pure-button">Edit</button>
 				</td>
-				<td><button onclick="deleteEmployee('{{$employee->id}}')">Delete</button></td>
+				<td><button onclick="deleteEmployee('{{$employee->id}}')" class="pure-button">Delete</button></td>
 			</tr>
 		@endforeach
 	</table>
@@ -55,80 +65,104 @@
 	<br><br>
 
 
-	<form id="addEmployee" action="index" method="post">
+	<form id="addEmployee" action="index" method="post" class="pure-form pure-form-aligned">
 		<fieldset>
 			<legend>Add A New Employee</legend>
 
-			<label for="newFirstNameInput">First Name</label>
-			<input id="newFirstNameInput" type="text" name="first_name" />
+			<div class="pure-control-group">
+				<label for="newFirstNameInput">First Name</label>
+				<input id="newFirstNameInput" type="text" name="first_name" />
+			</div>
 
-			<label for="newLastNameInput">Last Name</label>
-			<input id="newLastNameInput" type="text" name="last_name" />
+			<div class="pure-control-group">
+				<label for="newLastNameInput">Last Name</label>
+				<input id="newLastNameInput" type="text" name="last_name" />
+			</div>
 
-			<label for="newEmailInput">Email</label>
-			<input id="newEmailInput" type="text" name="email" />
+			<div class="pure-control-group">
+				<label for="newEmailInput">Email</label>
+				<input id="newEmailInput" type="text" name="email" />
+			</div>
 
-			<label for="newSkypeNameInput">Skype Name</label>
-			<input id="newSkypeNameInput" type="text" name="skype_name" />
+			<div class="pure-control-group">
+				<label for="newSkypeNameInput">Skype Name</label>
+				<input id="newSkypeNameInput" type="text" name="skype_name" />
+			</div>
 
-			<label for="newDepartmentInput">Department</label>
-			<select id="newDepartmentInput" name="department">
-				<option value=""></option>
-				@foreach($departments as $dept)
-					<option value="{{$dept->id}}">{{$dept->name}}</option>
-				@endforeach
-			</select>
+			<div class="pure-control-group">
+				<label for="newDepartmentInput">Department</label>
+				<select id="newDepartmentInput" name="department" style="width: 200px;">
+					<option value=""></option>
+					@foreach($departments as $dept)
+						<option value="{{$dept->id}}">{{$dept->name}}</option>
+					@endforeach
+				</select>
+			</div>
 
-			<label for="newJobTitleInput">Job Title</label>
-			<select id="newJobTitleInput" name="job_title">
-				<option value=""></option>
-				@foreach($jobTitles as $job)
-				<option value="{{$job->id}}">{{$job->name}}</option>
-				@endforeach
-			</select>
+			<div class="pure-control-group">
+				<label for="newJobTitleInput">Job Title</label>
+				<select id="newJobTitleInput" name="job_title" style="width: 200px;">
+					<option value=""></option>
+					@foreach($jobTitles as $job)
+					<option value="{{$job->id}}">{{$job->name}}</option>
+					@endforeach
+				</select>
+			</div>
 
-			<button type="submit">Save</button>
+			<button type="submit" class="pure-button pure-button-primary">Save</button>
 		</fieldset>
 		
 	</form>
 
 
-	<form id="editEmployee" action="index" method="post" style="display:none;">
+	<form id="editEmployee" action="index" method="post" style="display:none;" class="pure-form pure-form-aligned">
 		<fieldset>
 			<legend>Edit Employee</legend>
 
 			<input id="editId" type="hidden" name="id" value="">
 
-			<label for="editFirstNameInput">First Name</label>
-			<input id="editFirstNameInput" type="text" name="first_name" />
+			<div class="pure-control-group">
+				<label for="editFirstNameInput">First Name</label>
+				<input id="editFirstNameInput" type="text" name="first_name" />
+			</div>
 
-			<label for="editLastNameInput">Last Name</label>
-			<input id="editLastNameInput" type="text" name="last_name" />
+			<div class="pure-control-group">
+				<label for="editLastNameInput">Last Name</label>
+				<input id="editLastNameInput" type="text" name="last_name" />
+			</div>
 
-			<label for="editEmailInput">Email</label>
-			<input id="editEmailInput" type="text" name="email" />
+			<div class="pure-control-group">
+				<label for="editEmailInput">Email</label>
+				<input id="editEmailInput" type="text" name="email" />
+			</div>
 
-			<label for="editSkypeNameInput">Skype Name</label>
-			<input id="editSkypeNameInput" type="text" name="skype_name" />
+			<div class="pure-control-group">
+				<label for="editSkypeNameInput">Skype Name</label>
+				<input id="editSkypeNameInput" type="text" name="skype_name" />
+			</div>
 
-			<label for="editDepartmentInput">Department</label>
-			<select id="editDepartmentInput" name="department">
-				<option value=""></option>
-				@foreach($departments as $dept)
-				<option value="{{$dept->id}}">{{$dept->name}}</option>
-				@endforeach
-			</select>
+			<div class="pure-control-group">
+				<label for="editDepartmentInput">Department</label>
+				<select id="editDepartmentInput" name="department" style="width: 200px;">
+					<option value=""></option>
+					@foreach($departments as $dept)
+					<option value="{{$dept->id}}">{{$dept->name}}</option>
+					@endforeach
+				</select>
+			</div>
 
-			<label for="editJobTitleInput">Job Title</label>
-			<select id="editJobTitleInput" name="job_title">
-				<option value=""></option>
-				@foreach($jobTitles as $job)
-				<option value="{{$job->id}}">{{$job->name}}</option>
-				@endforeach
-			</select>
+			<div class="pure-control-group">
+				<label for="editJobTitleInput">Job Title</label>
+				<select id="editJobTitleInput" name="job_title" style="width: 200px;">
+					<option value=""></option>
+					@foreach($jobTitles as $job)
+					<option value="{{$job->id}}">{{$job->name}}</option>
+					@endforeach
+				</select>
+			</div>
 
-			<button type="submit">Save</button>
-			<button id="editCancel" type="reset">Cancel</button>
+			<button type="submit" class="pure-button pure-button-primary">Save</button>
+			<button id="editCancel" type="reset" class="pure-button">Cancel</button>
 		</fieldset>
 		
 	</form>

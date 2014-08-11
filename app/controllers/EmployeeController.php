@@ -2,6 +2,31 @@
 
 class EmployeeController extends BaseController {
 
+
+	public function login() {
+		if(Request::isMethod('post')) {
+
+			$data = array(
+				'email' => Input::get('email'),
+				'password' => Input::get('password')
+			);
+
+			if(Auth::attempt($data))
+				return Redirect::to('employee/index');
+			else
+				return Redirect::to('login');
+		}
+
+		return View::make('login');
+	}
+
+
+	public function logout() {
+		Auth::logout();
+		return View::make('login');
+	}
+
+
 	public function index()	{
 		if(Request::isMethod('post')) {
 			$employee = Input::has('id') ? Employee::find(Input::get('id')) : new Employee;

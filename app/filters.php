@@ -37,6 +37,8 @@ Route::filter('auth', function()
 {
 	if (Auth::guest())
 	{
+		// echo "do we get here?";
+		// exit;
 		if (Request::ajax())
 		{
 			return Response::make('Unauthorized', 401);
