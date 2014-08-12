@@ -28,6 +28,8 @@ class EmployeeController extends BaseController {
 
 
 	public function index()	{
+		$accessLevel = Auth::user()->access_level;
+
 		if(Request::isMethod('post')) {
 			$employee = Input::has('id') ? Employee::find(Input::get('id')) : new Employee;
 
@@ -41,11 +43,21 @@ class EmployeeController extends BaseController {
 			$employee->save();
 		}
 
+		$employees = Employee::where('is_active', '=', '1');
+
+		if($accessLevel === 'admin')
+			$employees = $employees->get();
+		else
+			$employees = $employees->where('department', '=', Auth::user()->getDepartment()->id)->get();
+
+		$departments = Department::where('is_active', '=', '1')->get();
+		$jobTitles = JobTitle::where('is_active', '=', '1')->get();
 
 		return View::make('employee/employee', array(
-			'employees' => Employee::where('is_active', '=', '1')->get(),
-			'departments' => Department::all(),
-			'jobTitles' => JobTitle::all()
+			'employees' => $employees,
+			'departments' => $departments,
+			'jobTitles' => $jobTitles,
+			'accessLevel' => $accessLevel
 		));
 	}
 
@@ -59,6 +71,7 @@ class EmployeeController extends BaseController {
 
 
 	public function searchEmployees() {
+		$accessLevel = Auth::user()->access_level;
 		$nameCriteria = Input::get('name');
 		$departmentCritera = Input::get('department');
 		$jobTitleCriteria = Input::get('jobTitle');
@@ -76,11 +89,16 @@ class EmployeeController extends BaseController {
 			}
 		}
 
-		if($departmentCritera !== "")
-			$employees = $employees->where('department', '=', $departmentCritera);
-
 		if($jobTitleCriteria !== "")
-			$employees = $employees->where('job_title', '=', $jobTitleCriteria);
+				$employees = $employees->where('job_title', '=', $jobTitleCriteria);
+
+		// can only see employees from all departments if you're an admin
+		if($accessLevel === 'admin') {
+			if($departmentCritera !== "")
+				$employees = $employees->where('department', '=', $departmentCritera);
+		} else {
+			$employees = $employees->where('department', '=', Auth::user()->getDepartment()->id);
+		}
 
 		$employees = $employees->where('is_active', '=', 1);
 
@@ -95,27 +113,26 @@ class EmployeeController extends BaseController {
 
 
 	public function autocomplete($name) {
+		$accessLevel = Auth::user()->access_level;
 		$nameArr = explode(" ", $name);
 		$retval = "";
 
-		$employees = new Employee;
+		$query = "SELECT first_name, last_name FROM employees WHERE ";
 
-		if(sizeof($nameArr) == 1) {
-			$employees = $employees->where('first_name', 'LIKE', '%' . $nameArr[0] . '%');
-			$employees = $employees->orWhere('last_name', 'LIKE', '%' . $nameArr[0] . '%');
-		}
-		elseif(sizeof($nameArr) == 2) {
-			$employees = $employees->where('first_name', 'LIKE', '%' . $nameArr[0] . '%');
-			$employees = $employees->where('last_name', 'LIKE', '%' . $nameArr[1] . '%');
-		}
+		if(sizeof($nameArr) == 1)
+			$query .= "(first_name LIKE '%" . $nameArr[0] . "%' OR last_name LIKE '%" . $nameArr[0] . "%') ";
+		elseif(sizeof($nameArr) == 2)
+			$query .= "first_name LIKE '%" . $nameArr[0] . "%' AND last_name LIKE '%" . $nameArr[1] . "%' ";
 
-		$employees = $employees->where('is_active', '=', 1);
+		if($accessLevel !== 'admin')
+			$query .= "AND department = '" . Auth::user()->getDepartment()->id . "' ";
+			
+		$query .= "AND is_active = '1' ";
 
-		$employees = $employees->get();
+		$results = DB::select($query);
 
-		foreach($employees as $employee) {
-			$retval .= $employee->first_name . " " . $employee->last_name .  ",";
-		}
+		foreach($results as $result)
+			$retval .= $result->first_name . " " . $result->last_name . ",";
 
 		echo $retval;
 		exit;

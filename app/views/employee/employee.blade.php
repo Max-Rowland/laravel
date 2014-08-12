@@ -12,15 +12,17 @@
 				<input type="text" name="name" id="searchName">
 			</div>
 
-			<div class="pure-control-group">
-				<label for="searchDepartment">Department</label>
-				<select name="department" id="searchDepartment" style="width: 200px;">
-					<option value=""></option>
-					@foreach($departments as $dept)
-						<option value="{{$dept->id}}">{{$dept->name}}</option>
-					@endforeach
-				</select>
-			</div>
+			@if($accessLevel === 'admin')
+				<div class="pure-control-group">
+					<label for="searchDepartment">Department</label>
+					<select name="department" id="searchDepartment" style="width: 200px;">
+						<option value=""></option>
+						@foreach($departments as $dept)
+							<option value="{{$dept->id}}">{{$dept->name}}</option>
+						@endforeach
+					</select>
+				</div>
+			@endif
 
 			<div class="pure-control-group">
 				<label for="searchJobTitle">Job Title</label>
@@ -34,144 +36,194 @@
 
 			<button type="submit" class="pure-button pure-button-primary">Search</button>
 		</fieldset>
-		
-
 	</form>
 
-	<br><br>
+	<br>
+
+	@if($accessLevel === 'admin' || $accessLevel === 'manager')
+		<button id="showAddForm" class="pure-button pure-button-primary">Add Employee</button>
+	@endif
+	<br>
 
 	@if(sizeof($employees) > 0)
-	<table class="pure-table pure-table-horizontal">
-		<thead>
-			<th>Name</th><th>Email</th><th>Skype Name</th><th>Department</th><th>Job Title</th><th>Edit</th><th>Delete</th>
-		</thead>
-		@foreach($employees as $employee)
-			<tr id="employeeRow{{$employee->id}}">
-				<td>{{$employee->getFullName()}}</td>
-				<td>{{$employee->email}}</td>
-				<td>{{$employee->skype_name}}</td>
-				<td>{{ $employee->getDepartment() == null ? "" : $employee->getDepartment()->name }}</td>
-				<td>{{ $employee->getJobTitle() == null ? "" : $employee->getJobTitle()->name}}</td>
-				<td><button onclick="edit('{{$employee->id}}', '{{$employee->first_name}}', '{{$employee->last_name}}', '{{$employee->email}}', '{{$employee->skype_name}}', 
-									'{{$employee->department}}', '{{$employee->job_title}}')" class="pure-button">Edit</button>
-				</td>
-				<td><button onclick="deleteEmployee('{{$employee->id}}')" class="pure-button">Delete</button></td>
-			</tr>
-		@endforeach
-	</table>
+		<table class="pure-table pure-table-horizontal">
+			<thead>
+				<th>Name</th>
+				<th>Email</th>
+				<th>Skype Name</th>
+				<th>Department</th>
+				<th>Job Title</th>
+				@if($accessLevel === 'admin' || $accessLevel === 'manager')
+					<th>Edit</th>
+				@endif
+				@if($accessLevel === 'admin')
+					<th>Delete</th>
+				@endif
+			</thead>
+			@foreach($employees as $employee)
+				<tr id="employeeRow{{$employee->id}}">
+					<td>{{$employee->getFullName()}}</td>
+					<td>{{$employee->email}}</td>
+					<td>{{$employee->skype_name}}</td>
+					<td>{{ $employee->getDepartment() == null ? "" : $employee->getDepartment()->name }}</td>
+					<td>{{ $employee->getJobTitle() == null ? "" : $employee->getJobTitle()->name}}</td>
+					@if($accessLevel === 'admin' || $accessLevel === 'manager')
+						<td><button onclick="edit('{{$employee->id}}', '{{$employee->first_name}}', '{{$employee->last_name}}', '{{$employee->email}}', '{{$employee->skype_name}}', 
+											'{{$employee->department}}', '{{$employee->job_title}}')" class="pure-button">Edit</button>
+						</td>
+					@endif
+					@if($accessLevel === 'admin')
+						<td><button onclick="deleteEmployee('{{$employee->id}}')" class="pure-button">Delete</button></td>
+					@endif
+				</tr>
+			@endforeach
+		</table>
 	@endif
 
 
 	<br><br>
 
+	@if($accessLevel === 'admin' || $accessLevel === 'manager')
+		<form id="addEmployee" action="index" method="post" class="pure-form pure-form-aligned" style="display: none;">
+			<fieldset>
+				<legend>Add A New Employee</legend>
 
-	<form id="addEmployee" action="index" method="post" class="pure-form pure-form-aligned">
-		<fieldset>
-			<legend>Add A New Employee</legend>
+				<div class="pure-control-group">
+					<label for="newFirstNameInput">First Name</label>
+					<input id="newFirstNameInput" type="text" name="first_name" required />
+				</div>
 
-			<div class="pure-control-group">
-				<label for="newFirstNameInput">First Name</label>
-				<input id="newFirstNameInput" type="text" name="first_name" />
-			</div>
+				<div class="pure-control-group">
+					<label for="newLastNameInput">Last Name</label>
+					<input id="newLastNameInput" type="text" name="last_name" required />
+				</div>
 
-			<div class="pure-control-group">
-				<label for="newLastNameInput">Last Name</label>
-				<input id="newLastNameInput" type="text" name="last_name" />
-			</div>
+				<div class="pure-control-group">
+					<label for="newEmailInput">Email</label>
+					<input id="newEmailInput" type="text" name="email" required />
+				</div>
 
-			<div class="pure-control-group">
-				<label for="newEmailInput">Email</label>
-				<input id="newEmailInput" type="text" name="email" />
-			</div>
+				<div class="pure-control-group">
+					<label for="newSkypeNameInput">Skype Name</label>
+					<input id="newSkypeNameInput" type="text" name="skype_name" required />
+				</div>
 
-			<div class="pure-control-group">
-				<label for="newSkypeNameInput">Skype Name</label>
-				<input id="newSkypeNameInput" type="text" name="skype_name" />
-			</div>
+				@if($accessLevel === 'admin')
+					<div class="pure-control-group">
+						<label for="newDepartmentInput">Department</label>
+						<select id="newDepartmentInput" name="department" style="width: 200px;">
+							<option value=""></option>
+							@foreach($departments as $dept)
+								<option value="{{$dept->id}}">{{$dept->name}}</option>
+							@endforeach
+						</select>
+					</div>
+				@else
+					<input type="hidden" name="department" value="{{Auth::user()->department}}">
+				@endif
 
-			<div class="pure-control-group">
-				<label for="newDepartmentInput">Department</label>
-				<select id="newDepartmentInput" name="department" style="width: 200px;">
-					<option value=""></option>
-					@foreach($departments as $dept)
-						<option value="{{$dept->id}}">{{$dept->name}}</option>
-					@endforeach
-				</select>
-			</div>
+				<div class="pure-control-group">
+					<label for="newJobTitleInput">Job Title</label>
+					<select id="newJobTitleInput" name="job_title" style="width: 200px;">
+						<option value=""></option>
+						@foreach($jobTitles as $job)
+							<option value="{{$job->id}}">{{$job->name}}</option>
+						@endforeach
+					</select>
+				</div>
 
-			<div class="pure-control-group">
-				<label for="newJobTitleInput">Job Title</label>
-				<select id="newJobTitleInput" name="job_title" style="width: 200px;">
-					<option value=""></option>
-					@foreach($jobTitles as $job)
-					<option value="{{$job->id}}">{{$job->name}}</option>
-					@endforeach
-				</select>
-			</div>
-
-			<button type="submit" class="pure-button pure-button-primary">Save</button>
-		</fieldset>
-		
-	</form>
+				<button type="submit" class="pure-button pure-button-primary">Save</button>
+				<button type="reset" id="addCancel" class="pure-button">Cancel</button>
+			</fieldset>
+		</form>
 
 
-	<form id="editEmployee" action="index" method="post" style="display:none;" class="pure-form pure-form-aligned">
-		<fieldset>
-			<legend>Edit Employee</legend>
+		<form id="editEmployee" action="index" method="post" style="display:none;" class="pure-form pure-form-aligned">
+			<fieldset>
+				<legend>Edit Employee</legend>
 
-			<input id="editId" type="hidden" name="id" value="">
+				<input id="editId" type="hidden" name="id" value="">
 
-			<div class="pure-control-group">
-				<label for="editFirstNameInput">First Name</label>
-				<input id="editFirstNameInput" type="text" name="first_name" />
-			</div>
+				<div class="pure-control-group">
+					<label for="editFirstNameInput">First Name</label>
+					<input id="editFirstNameInput" type="text" name="first_name" required />
+				</div>
 
-			<div class="pure-control-group">
-				<label for="editLastNameInput">Last Name</label>
-				<input id="editLastNameInput" type="text" name="last_name" />
-			</div>
+				<div class="pure-control-group">
+					<label for="editLastNameInput">Last Name</label>
+					<input id="editLastNameInput" type="text" name="last_name" required />
+				</div>
 
-			<div class="pure-control-group">
-				<label for="editEmailInput">Email</label>
-				<input id="editEmailInput" type="text" name="email" />
-			</div>
+				<div class="pure-control-group">
+					<label for="editEmailInput">Email</label>
+					<input id="editEmailInput" type="text" name="email" required />
+				</div>
 
-			<div class="pure-control-group">
-				<label for="editSkypeNameInput">Skype Name</label>
-				<input id="editSkypeNameInput" type="text" name="skype_name" />
-			</div>
+				<div class="pure-control-group">
+					<label for="editSkypeNameInput">Skype Name</label>
+					<input id="editSkypeNameInput" type="text" name="skype_name" required />
+				</div>
 
-			<div class="pure-control-group">
-				<label for="editDepartmentInput">Department</label>
-				<select id="editDepartmentInput" name="department" style="width: 200px;">
-					<option value=""></option>
-					@foreach($departments as $dept)
-					<option value="{{$dept->id}}">{{$dept->name}}</option>
-					@endforeach
-				</select>
-			</div>
+				@if($accessLevel === 'admin')
+					<div class="pure-control-group">
+						<label for="editDepartmentInput">Department</label>
+						<select id="editDepartmentInput" name="department" style="width: 200px;">
+							<option value=""></option>
+							@foreach($departments as $dept)
+								<option value="{{$dept->id}}">{{$dept->name}}</option>
+							@endforeach
+						</select>
+					</div>
+				@else
+					<input type="hidden" name="department" value="{{Auth::user()->department}}">
+				@endif
 
-			<div class="pure-control-group">
-				<label for="editJobTitleInput">Job Title</label>
-				<select id="editJobTitleInput" name="job_title" style="width: 200px;">
-					<option value=""></option>
-					@foreach($jobTitles as $job)
-					<option value="{{$job->id}}">{{$job->name}}</option>
-					@endforeach
-				</select>
-			</div>
+				<div class="pure-control-group">
+					<label for="editJobTitleInput">Job Title</label>
+					<select id="editJobTitleInput" name="job_title" style="width: 200px;">
+						<option value=""></option>
+						@foreach($jobTitles as $job)
+							<option value="{{$job->id}}">{{$job->name}}</option>
+						@endforeach
+					</select>
+				</div>
 
-			<button type="submit" class="pure-button pure-button-primary">Save</button>
-			<button id="editCancel" type="reset" class="pure-button">Cancel</button>
-		</fieldset>
-		
-	</form>
+				<button type="submit" class="pure-button pure-button-primary">Save</button>
+				<button id="editCancel" type="reset" class="pure-button">Cancel</button>
+			</fieldset>
+		</form>
+	@endif
 
 
 	<script type="text/javascript">
 
+		$("#showAddForm").click(function() {
+			$("#addEmployee").toggle();
+			$("#showAddForm").toggle();
+			$("#newFirstNameInput").focus();
+		});
+
 		$("#editCancel").click(function() { 
 			$("#editEmployee").toggle(); 
+		});
+
+		$("#addCancel").click(function() { 
+			$("#addEmployee").toggle();
+			$("#showAddForm").toggle();
+		});
+
+		$("#addEmployee").submit(function() {
+			if($("#newDepartmentInput").val() == "" || $("#newJobTitleInput").val() == "") {
+				alert("Department and job title are required fields.");
+				return false;
+			}
+		});
+
+		$("#editEmployee").submit(function() {
+			if($("#editDepartmentInput").val() == "" || $("#editJobTitleInput").val() == "") {
+				alert("Department and job title are required fields.");
+				return false;
+			}
 		});
 
 		$("input#searchName").autocomplete({
@@ -199,6 +251,7 @@
 			$("#editSkypeNameInput").val(skypeName);
 			$("#editDepartmentInput").val(department);
 			$("#editJobTitleInput").val(jobTitle);
+			$("#editFirstNameInput").focus();
 		}
 
 
