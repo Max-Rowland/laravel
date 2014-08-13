@@ -12,10 +12,10 @@
     		{{ HTML::image('images/sim-logo.png', 'alt', array( 'width' => 200, 'height' => 70 )) }}
     		@if(Auth::check())
 	    		<div id="navbar">
-					<a href="/laravel/public/department/index">Departments</a>
-					<a href="/laravel/public/employee/index">Employees</a>
-					<a href="/laravel/public/jobTitle/index">Job Titles</a>
-					<a href="/laravel/public/logout">Logout</a>
+					<a href="{{action('DepartmentController@index')}}">Departments</a>
+					<a href="{{action('EmployeeController@index')}}">Employees</a>
+					<a href="{{action('JobTitleController@index')}}">Job Titles</a>
+					<a href="{{action('EmployeeController@logout')}}">Logout</a>
 				</div>
 			@endif
 	        @yield('content')
