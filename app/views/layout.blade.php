@@ -12,9 +12,9 @@
     		{{ HTML::image('images/sim-logo.png', 'alt', array( 'width' => 200, 'height' => 70 )) }}
     		@if(Auth::check())
 	    		<div id="navbar">
-					<a href="{{action('DepartmentController@index')}}">Departments</a>
-					<a href="{{action('EmployeeController@index')}}">Employees</a>
-					<a href="{{action('JobTitleController@index')}}">Job Titles</a>
+					<a href="{{url('department/index')}}">Departments</a>
+					<a href="{{url('employee/index')}}">Employees</a>
+					<a href="{{url('jobTitle/index')}}">Job Titles</a>
 					<a href="{{action('EmployeeController@logout')}}">Logout</a>
 				</div>
 			@endif
