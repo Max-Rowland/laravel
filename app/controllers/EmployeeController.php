@@ -139,5 +139,28 @@ class EmployeeController extends BaseController {
 	}
 
 
+	public function profile() {
+		$user = Auth::user();
+
+		if(Request::isMethod('post')) {
+			$user->first_name = Input::get('first_name');
+			$user->last_name = Input::get('last_name');
+			$user->email = Input::get('email');
+			$user->skype_name = Input::get('skype_name');
+			$user->department = Input::get('department') == "" ? null : Input::get('department');
+			$user->job_title = Input::get('job_title') == "" ? null : Input::get('job_title');
+
+			$user->save();
+		}
+
+		return View::make('employee/profile', array(
+			'user' => $user,
+			'departments' => Department::all(),
+			'jobTitles' => JobTitle::all(),
+			'accessLevel' => $user->access_level
+		));
+	}
+
+
 
 }

@@ -28,6 +28,8 @@ Route::group(array('before' => 'auth'), function() {
 	//*********** EMPLOYEE ROUTES ***********
 	Route::any('employee/index', 'EmployeeController@index');
 
+	Route::any('employee/profile', 'EmployeeController@profile');
+
 	Route::post('employee/search', array(
 		'uses' => 'EmployeeController@searchEmployees'
 	));

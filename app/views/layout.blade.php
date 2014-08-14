@@ -15,6 +15,7 @@
 					<a href="{{url('department/index')}}">Departments</a>
 					<a href="{{url('employee/index')}}">Employees</a>
 					<a href="{{url('jobTitle/index')}}">Job Titles</a>
+					<a href="{{url('employee/profile')}}">Profile</a>
 					<a href="{{action('EmployeeController@logout')}}">Logout</a>
 				</div>
 			@endif
