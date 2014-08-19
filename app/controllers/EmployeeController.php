@@ -11,10 +11,11 @@ class EmployeeController extends BaseController {
 				'password' => Input::get('password')
 			);
 
-			if(Auth::attempt($data))
-				return Redirect::to('employee/index');
-			else
-				return Redirect::to('login');
+			return (Auth::attempt($data)) ? Redirect::to('employee/index') : Redirect::to('login');
+			// if(Auth::attempt($data))
+			// 	return Redirect::to('employee/index');
+			// else
+			// 	return Redirect::to('login');
 		}
 
 		return View::make('login');
@@ -45,10 +46,11 @@ class EmployeeController extends BaseController {
 
 		$employees = Employee::where('is_active', '=', '1');
 
-		if($accessLevel === 'admin')
-			$employees = $employees->get();
-		else
-			$employees = $employees->where('department', '=', Auth::user()->getDepartment()->id)->get();
+		$employees = ($accessLevel === 'admin') ? $employees->get() : $employees->where('department', '=', Auth::user()->getDepartment()->id)->get();
+		// if($accessLevel === 'admin')
+		// 	$employees = $employees->get();
+		// else
+		// 	$employees = $employees->where('department', '=', Auth::user()->getDepartment()->id)->get();
 
 		$departments = Department::where('is_active', '=', '1')->get();
 		$jobTitles = JobTitle::where('is_active', '=', '1')->get();
@@ -107,7 +109,8 @@ class EmployeeController extends BaseController {
 		return View::make('employee/employee', array(
 			'employees' => $employees,
 			'departments' => Department::all(),
-			'jobTitles' => JobTitle::all()
+			'jobTitles' => JobTitle::all(),
+			'accessLevel' => $accessLevel
 		));
 	}
 
