@@ -7,7 +7,7 @@
 		<fieldset>
 			<legend>Your Information</legend>
 
-			<img src="{{$user->profile_picture}}" alt="picture" width="300" height="300" />
+			<img src="{{$user->profile_picture}}" alt="picture" width="auto" height="300" />
 
 			<br>
 
