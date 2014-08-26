@@ -262,9 +262,10 @@
 					url: "removeEmployee",
 					data: {id : id},
 					dataType: "text",
+					contentType: 'application/json',
 					success: function(data) {
-						if(data == "success")
-							$("#employeeRow" + id).remove();
+						// if(data == "success")
+						// 	$("#employeeRow" + id).remove();
 					}
 				});
 			}

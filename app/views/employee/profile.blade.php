@@ -3,11 +3,26 @@
 @section('content')
 <h2>Your Profile</h2>
 
-	<form id="addEmployee" action="profile" method="post" class="pure-form pure-form-aligned">
+	<form id="addEmployee" action="profile" method="post" enctype="multipart/form-data" class="pure-form pure-form-aligned">
 		<fieldset>
 			<legend>Your Information</legend>
 
+			<img src="{{$user->profile_picture}}" alt="picture" width="300" height="300" />
+
+			<br>
+
+			<div class="pure-control-group">
+				@if($user->profile_picture != null || $user->profile_picture != "")
+					<label for="picUpload">Change your picture:</label>
+				@else
+					<label for="picUpload">Choose a picture:</label>
+				@endif
+				<input type="file" name="photo" id="picUpload" accept="image/*">
+			</div>
+
 			<input type="hidden" name="id" value="{{$user->id}}">
+
+			<br>
 
 			<div class="pure-control-group">
 				<label for="newFirstNameInput">First Name</label>
@@ -54,7 +69,6 @@
 
 				<input type="hidden" name="job_title" value="{{$user->job_title}}">
 			@endif
-
 			
 
 			<button type="submit" class="pure-button pure-button-primary">Save</button>
