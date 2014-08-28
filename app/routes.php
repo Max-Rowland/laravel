@@ -60,5 +60,13 @@ Route::group(array('before' => 'auth'), function() {
 	    'uses' => 'JobTitleController@removeJobTitle'
 	));
 	//****************************************
+
+	//*********** CHAT ROOM ROUTES ***********
+	Route::any('chat', 'ChatController@index');
+
+	Route::post( 'jobTitle/removeJobTitle', array(
+	    'uses' => 'JobTitleController@removeJobTitle'
+	));
+	//****************************************
 });
 
