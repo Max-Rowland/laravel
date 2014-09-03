@@ -11,7 +11,7 @@ class EmployeeController extends BaseController {
 				'password' => Input::get('password')
 			);
 
-			return (Auth::attempt($data)) ? Redirect::to('employee/index') : Redirect::to('login');
+			return (Auth::attempt($data)) ? Redirect::to('employee/index') : Redirect::to('login')->withErrors(['Email or password were incorrect.']);
 		}
 
 		return View::make('login');
@@ -57,10 +57,6 @@ class EmployeeController extends BaseController {
 
 
 	public function removeEmployee() {
-
-
-		print_r($_POST);
-		exit;
 		$employee = Employee::find(Input::get('id'));
 		$employee->is_active = 0;
 
@@ -104,12 +100,12 @@ class EmployeeController extends BaseController {
 
 		if(Request::isMethod('post')) {
 			if(Input::hasFile('photo')) {
-				if(strcasecmp(Input::file('photo')->getClientOriginalExtension(), 'jpg') || strcasecmp(Input::file('photo')->getClientOriginalExtension(), 'png')) {
+				// Check if the file is a jpg or png
+				if(strcasecmp(Input::file('photo')->getClientOriginalExtension(), 'jpg') === 0 || strcasecmp(Input::file('photo')->getClientOriginalExtension(), 'png') === 0) {
 					Input::file('photo')->move(Config::get('global.profilePicturePath'), $user->id . "-profile.jpg");
 					$user->profile_picture = Config::get('global.profilePictureURL') . "/" . $user->id . "-profile.jpg";
 				} else {
-					echo "Only .jpg and .png allowed (do better verification later).";
-					exit;
+					Redirect::to('employee/profile')->withErrors(['Only JPG and PNG files allowed.']);
 				}
 			}
 

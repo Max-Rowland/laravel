@@ -3,6 +3,10 @@
 @section('content')
 <h2>Your Profile</h2>
 
+	@if($errors->any())
+		<h4>{{$errors->first()}}</h4>
+	@endif
+
 	<form id="addEmployee" action="profile" method="post" enctype="multipart/form-data" class="pure-form pure-form-aligned">
 		<fieldset>
 			<legend>Your Information</legend>

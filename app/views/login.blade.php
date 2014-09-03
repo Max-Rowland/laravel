@@ -3,6 +3,10 @@
 @section('content')
 
 	<br>
+
+	@if($errors->any())
+		<h4>{{$errors->first()}}</h4>
+	@endif
 	
 	{{ Form::open(array('url' => 'login', 'class' => 'pure-form pure-form-aligned')) }}
 		<div class="pure-control-group">
