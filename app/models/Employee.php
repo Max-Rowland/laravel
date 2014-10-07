@@ -9,24 +9,26 @@ class Employee extends Eloquent implements UserInterface, RemindableInterface {
 
 	use UserTrait, RemindableTrait;
 
-
 	protected $primaryKey = 'id';
 	protected $table = 'employees';
 	protected $hidden = array('password', 'remember_token');
-	
 	public $timestamps = false;
+
+
+	public function department() {
+		return $this->hasOne('Department', 'id', 'department_id');
+	}
+
+
+	public function jobTitle() {
+		return $this->hasOne('JobTitle', 'id', 'job_title_id');
+	}
+
 
 	public function getFullName() {
 		return $this->last_name . ", " . $this->first_name;
 	}
 
-	public function getDepartment() {
-		return Department::find($this->department);
-	}
-
-	public function getJobTitle() {
-		return JobTitle::find($this->job_title);
-	}
 
 	public static function getEmployeesBySearchCriteria($accessLevel, $nameCriteria = null, $departmentCritera = null, $jobTitleCriteria = null) {
 		$employees = new Employee;
@@ -43,14 +45,14 @@ class Employee extends Eloquent implements UserInterface, RemindableInterface {
 		}
 
 		if($jobTitleCriteria !== "")
-				$employees = $employees->where('job_title', '=', $jobTitleCriteria);
+			$employees = $employees->where('job_title_id', '=', $jobTitleCriteria);
 
 		// can only see employees from all departments if you're an admin
 		if($accessLevel === 'admin') {
 			if($departmentCritera !== "")
-				$employees = $employees->where('department', '=', $departmentCritera);
+				$employees = $employees->where('department_id', '=', $departmentCritera);
 		} else {
-			$employees = $employees->where('department', '=', Auth::user()->getDepartment()->id);
+			$employees = $employees->where('department_id', '=', Auth::user()->department->id);
 		}
 
 		$employees = $employees->where('is_active', '=', 1);
@@ -59,6 +61,7 @@ class Employee extends Eloquent implements UserInterface, RemindableInterface {
 
 		return $employees;
 	}
+
 
 	public static function getAutocompleteResults($accessLevel, $name) {
 		$nameArr = explode(" ", $name);

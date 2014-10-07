@@ -2,8 +2,12 @@
 
 @section('content')
 	<h2>Employees</h2>
+
+	@if(Session::get('postMessage') !== "")
+		<p><b>{{Session::get('postMessage')}}</b></p>
+	@endif
 	
-	<form id="searchEmployees" action="search" method="post" class="pure-form pure-form-aligned">
+	<form id="searchEmployees" action="employee/search" method="post" class="pure-form pure-form-aligned">
 		<fieldset>
 			<legend>Search Employees</legend>
 
@@ -65,11 +69,11 @@
 					<td>{{$employee->getFullName()}}</td>
 					<td>{{$employee->email}}</td>
 					<td>{{$employee->skype_name}}</td>
-					<td>{{ $employee->getDepartment() == null ? "" : $employee->getDepartment()->name }}</td>
-					<td>{{ $employee->getJobTitle() == null ? "" : $employee->getJobTitle()->name}}</td>
+					<td>{{ $employee->department == null ? "" : $employee->department->name }}</td>
+					<td>{{ $employee->jobTitle == null ? "" : $employee->jobTitle->name}}</td>
 					@if($accessLevel === 'admin' || $accessLevel === 'manager')
 						<td><button onclick="edit('{{$employee->id}}', '{{$employee->first_name}}', '{{$employee->last_name}}', '{{$employee->email}}', '{{$employee->skype_name}}', 
-											'{{$employee->department}}', '{{$employee->job_title}}')" class="pure-button">Edit</button>
+											'{{$employee->department->id}}', '{{$employee->jobTitle->id}}')" class="pure-button">Edit</button>
 						</td>
 					@endif
 					@if($accessLevel === 'admin')
@@ -84,7 +88,7 @@
 	<br><br>
 
 	@if($accessLevel === 'admin' || $accessLevel === 'manager')
-		<form id="addEmployee" action="index" method="post" class="pure-form pure-form-aligned" style="display: none;">
+		<form id="addEmployee" action="employee/postEmployee" method="post" class="pure-form pure-form-aligned" style="display: none;">
 			<fieldset>
 				<legend>Add A New Employee</legend>
 
@@ -138,7 +142,7 @@
 		</form>
 
 
-		<form id="editEmployee" action="index" method="post" style="display:none;" class="pure-form pure-form-aligned">
+		<form id="editEmployee" action="employee/postEmployee" method="post" style="display:none;" class="pure-form pure-form-aligned">
 			<fieldset>
 				<legend>Edit Employee</legend>
 
@@ -197,6 +201,15 @@
 
 	<script type="text/javascript">
 
+		var queries = {{ json_encode(DB::getQueryLog()) }};
+	    console.log('/****************************** Database Queries ******************************/');
+	    console.log(' ');
+	    $.each(queries, function(id, query) {
+	        console.log('   ' + query.time + ' | ' + query.query + ' | ' + query.bindings[0]);
+	    });
+	    console.log(' ');
+	    console.log('/****************************** End Queries ***********************************/');
+
 		$("#showAddForm").click(function() {
 			$("#addEmployee").toggle();
 			$("#showAddForm").toggle();
@@ -230,7 +243,7 @@
 			source: function(request, response) {
 				$.ajax({
 					type: "GET",
-					url: "autocomplete/" + $('#searchName').val(),
+					url: "employee/autocomplete/" + $('#searchName').val(),
 					dataType: "text",
 					success: function(data) {
 						var suggestions = data.split(",");

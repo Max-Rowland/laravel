@@ -3,11 +3,11 @@
 @section('content')
 <h2>Your Profile</h2>
 
-	@if($errors->any())
-		<h4>{{$errors->first()}}</h4>
+	@if(Session::get('postMessage') !== "")
+		<h4>{{Session::get('postMessage')}}</h4>
 	@endif
 
-	<form id="addEmployee" action="profile" method="post" enctype="multipart/form-data" class="pure-form pure-form-aligned">
+	<form id="addEmployee" action="postProfile" method="post" enctype="multipart/form-data" class="pure-form pure-form-aligned">
 		<fieldset>
 			<legend>Your Information</legend>
 
@@ -54,7 +54,7 @@
 					<select id="newDepartmentInput" name="department" style="width: 200px;">
 						<option value=""></option>
 						@foreach($departments as $dept)
-							<option value="{{$dept->id}}" @if($user->department == $dept->id) selected @endif>{{$dept->name}}</option>
+							<option value="{{$dept->id}}" @if($user->department->id == $dept->id) selected @endif>{{$dept->name}}</option>
 						@endforeach
 					</select>
 				</div>
@@ -64,7 +64,7 @@
 				<select id="newJobTitleInput" name="job_title" style="width: 200px;">
 					<option value=""></option>
 					@foreach($jobTitles as $job)
-						<option value="{{$job->id}}" @if($user->job_title == $job->id) selected @endif>{{$job->name}}</option>
+						<option value="{{$job->id}}" @if($user->jobTitle->id == $job->id) selected @endif>{{$job->name}}</option>
 					@endforeach
 				</select>
 			</div>

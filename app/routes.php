@@ -20,19 +20,23 @@ Route::any('logout', array(
 	'uses' => 'EmployeeController@logout'
 ));
 
+Route::any('test', 'EmployeeController@test');
+
 
 Route::group(array('before' => 'auth'), function() {
 	//route to always go to employee by default
 	Route::any('/', 'EmployeeController@index');
 
 	//*********** EMPLOYEE ROUTES ***********
-	Route::any('employee/index', 'EmployeeController@index');
+	Route::get('employee', 'EmployeeController@index');
 
-	Route::any('employee/profile', 'EmployeeController@profile');
+	Route::post('employee/postEmployee', 'EmployeeController@postEmployee');
 
-	Route::post('employee/search', array(
-		'uses' => 'EmployeeController@searchEmployees'
-	));
+	Route::get('employee/profile', 'EmployeeController@profile');
+
+	Route::post('employee/postProfile', 'EmployeeController@postProfile');
+
+	Route::post('employee/search', 'EmployeeController@searchEmployees');
 
 	Route::post( 'employee/removeEmployee', array(
 	    'uses' => 'EmployeeController@removeEmployee'
@@ -45,7 +49,7 @@ Route::group(array('before' => 'auth'), function() {
 
 
 	//*********** DEPARTMENT ROUTES ***********
-	Route::any('department/index', 'DepartmentController@index');
+	Route::any('department', 'DepartmentController@index');
 
 	Route::post( 'department/removeDepartment', array(
 	    'uses' => 'DepartmentController@removeDepartment'
@@ -54,19 +58,12 @@ Route::group(array('before' => 'auth'), function() {
 
 
 	//*********** JOB TITLE ROUTES ***********
-	Route::any('jobTitle/index', 'JobTitleController@index');
+	Route::any('jobTitle', 'JobTitleController@index');
 
 	Route::post( 'jobTitle/removeJobTitle', array(
 	    'uses' => 'JobTitleController@removeJobTitle'
 	));
 	//****************************************
 
-	//*********** CHAT ROOM ROUTES ***********
-	Route::any('chat', 'ChatController@index');
-
-	Route::post( 'jobTitle/removeJobTitle', array(
-	    'uses' => 'JobTitleController@removeJobTitle'
-	));
-	//****************************************
 });
 
